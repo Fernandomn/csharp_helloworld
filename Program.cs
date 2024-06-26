@@ -22,20 +22,6 @@ namespace HelloWorld
         {
             IConfiguration config = new ConfigurationBuilder().AddJsonFile("./appsettings.json").Build();
             DataContextDapper dapper = new DataContextDapper(config);
-            // string sql = @"INSERT INTO TutorialAppSchema.Computer (
-            //     Motherboard,
-            //     HasWifi,
-            //     HasLTE,
-            //     ReleaseDate,
-            //     Price,
-            //     VideoCard
-            // ) VALUES ('" + computer.Motherboard
-            //     + "','" + computer.HasWifi
-            //     + "','" + computer.HasLTE
-            //     + "','" + computer.ReleaseDate.ToString("yyyy-MM-dd")
-            //     + "','" + computer.Price.ToString("0.00", CultureInfo.InvariantCulture)
-            //     + "','" + computer.VideoCard
-            // + "')";
 
             // Console.WriteLine(sql);
 
@@ -61,8 +47,22 @@ namespace HelloWorld
             {
                 foreach (Computer computer in computers)
                 {
-                    // Console.WriteLine(computer.Motherboard);
-
+                    string sql = @"INSERT INTO TutorialAppSchema.Computer (
+                                Motherboard,
+                                HasWifi,
+                                HasLTE,
+                                ReleaseDate,
+                                Price,
+                                VideoCard
+                            ) VALUES ('" + computer.Motherboard
+                                + "','" + computer.HasWifi
+                                + "','" + computer.HasLTE
+                                + "','" + computer.ReleaseDate?.ToString("yyyy-MM-dd")
+                                + "','" + computer.Price.ToString("0.00", CultureInfo.InvariantCulture)
+                                + "','" + EscapeSingleQuote(computer.VideoCard)
+                            + "')";
+                    // Console.WriteLine(sql);
+                    dapper.ExecuteSql(sql);
                 }
             }
 
@@ -76,6 +76,11 @@ namespace HelloWorld
 
             string computersCopySystem = System.Text.Json.JsonSerializer.Serialize(computers, options);
             File.WriteAllText("computersCopySystem.txt", computersCopySystem);
+        }
+
+        static string EscapeSingleQuote(string input)
+        {
+            return input.Replace("'", "''");
         }
     }
 }
