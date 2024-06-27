@@ -55,17 +55,30 @@ namespace HelloWorld
                         options => options.MapFrom(source => source.video_card));
             }));
 
-            IEnumerable<ComputerSnake>? computersSystem = System.Text.Json.JsonSerializer.Deserialize<IEnumerable<ComputerSnake>>(computersJson);
+            IEnumerable<Computer>? computersSystemJSONPropertyMapping = JsonConvert.DeserializeObject<IEnumerable<Computer>>(computersJson);
 
-            if (computersSystem != null)
+
+            if (computersSystemJSONPropertyMapping != null)
             {
-                IEnumerable<Computer> computerResult = mapper.Map<IEnumerable<Computer>>(computersSystem);
 
-                foreach (Computer computer in computerResult)
+                foreach (Computer computer in computersSystemJSONPropertyMapping)
                 {
                     Console.WriteLine(computer.Motherboard);
                 }
             }
+
+
+            // IEnumerable<ComputerSnake>? computersSystem = System.Text.Json.JsonSerializer.Deserialize<IEnumerable<ComputerSnake>>(computersJson);
+
+            // if (computersSystem != null)
+            // {
+            //     IEnumerable<Computer> computerResult = mapper.Map<IEnumerable<Computer>>(computersSystem);
+
+            //     foreach (Computer computer in computerResult)
+            //     {
+            //         Console.WriteLine(computer.Motherboard);
+            //     }
+            // }
 
             // Console.WriteLine(computersJson);
 
